@@ -1,0 +1,392 @@
+/* index.css
+   Responsive layout + matching dark mode + improved animations
+   - Supports prefers-color-scheme and manual toggle with `body.dark`
+   - Drop-in for your frontend/src (import "./index.css")
+*/
+
+/* ---------- Variables (light & dark) ---------- */
+:root{
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --muted: #64748b;
+  --text: #0f172a;
+  --brand-1: #0ea5a4;
+  --brand-2: #7c3aed;
+  --accent: #6366f1;
+  --card-shadow: 0 6px 18px rgba(16,24,40,0.06);
+  --glass: rgba(255,255,255,0.6);
+  --border: rgba(15,23,42,0.04);
+  --success: #16a34a;
+  --danger: #ef4444;
+  --timer-start: #fde68a;
+  --timer-end: #fca5a5;
+}
+
+/* Dark mode variables */
+@media (prefers-color-scheme: dark) {
+  :root{
+    --bg: #071322;
+    --surface: #071a2a;
+    --muted: #94a3b8;
+    --text: #e6eefc;
+    --brand-1: #2dd4bf;
+    --brand-2: #9b5cff;
+    --accent: #8b87ff;
+    --card-shadow: 0 10px 30px rgba(2,6,23,0.6);
+    --glass: rgba(255,255,255,0.03);
+    --border: rgba(255,255,255,0.04);
+    --success: #10b981;
+    --danger: #fb7185;
+    --timer-start: #f59e0b;
+    --timer-end: #ef4444;
+  }
+}
+
+/* Manual dark toggle via <body class="dark"> */
+body.dark {
+  --bg: #071322;
+  --surface: #071a2a;
+  --muted: #94a3b8;
+  --text: #e6eefc;
+  --brand-1: #2dd4bf;
+  --brand-2: #9b5cff;
+  --accent: #8b87ff;
+  --card-shadow: 0 10px 30px rgba(2,6,23,0.6);
+  --glass: rgba(255,255,255,0.03);
+  --border: rgba(255,255,255,0.04);
+  --success: #10b981;
+  --danger: #fb7185;
+  --timer-start: #f59e0b;
+  --timer-end: #ef4444;
+}
+
+/* ---------- Reset & base ---------- */
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: radial-gradient(1200px 600px at 10% 5%, rgba(99,102,241,0.04), transparent),
+              linear-gradient(180deg, var(--bg), var(--bg));
+  color: var(--text);
+  line-height: 1.35;
+  -webkit-text-size-adjust: 100%;
+  transition: background .35s ease, color .25s ease;
+  -webkit-font-feature-settings: "liga" 1;
+}
+
+/* ---------- Small animation utilities ---------- */
+@keyframes floatY {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+@keyframes pulse {
+  0% { transform: scale(1); opacity:1; }
+  50% { transform: scale(1.04); opacity:0.95; }
+  100% { transform: scale(1); opacity:1; }
+}
+@keyframes pop {
+  0% { transform: scale(.98); opacity:0; }
+  60% { transform: scale(1.02); opacity:1; }
+  100% { transform: scale(1); opacity:1; }
+}
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* subtle focus ring for accessibility */
+:focus {
+  outline: none;
+  box-shadow: 0 6px 18px rgba(99,102,241,0.12);
+}
+
+/* ---------- Container ---------- */
+.container {
+  width: 100%;
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* ---------- Header ---------- */
+.app-header {
+  background: linear-gradient(90deg, var(--brand-1) 0%, var(--brand-2) 100%);
+  color: white;
+  padding: 14px 0;
+  box-shadow: 0 2px 8px rgba(12, 18, 27, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(6px);
+}
+.app-header .brand {
+  font-weight: 800;
+  font-size: 1.125rem;
+  letter-spacing: 0.2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.app-header .nav {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* brand logo small float effect */
+.app-header .brand .logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: floatY 4.5s ease-in-out infinite;
+  box-shadow: 0 4px 14px rgba(2,6,23,0.08);
+  font-weight:700;
+}
+
+/* ---------- Main ---------- */
+.app-main { padding: 28px 0; }
+
+/* Grid utilities */
+.grid { display: grid; gap: 20px; }
+.grid-cols-1 { grid-template-columns: 1fr; }
+
+/* ---------- Cards ---------- */
+.card {
+  background: linear-gradient(180deg, var(--surface), color-mix(in srgb, var(--surface) 92%, transparent));
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border);
+  transition: transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, background .25s ease;
+  transform-origin: center;
+  animation: pop .28s ease both;
+}
+.card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 18px 40px rgba(2,6,23,0.18);
+}
+.card h3 { margin: 0 0 8px 0; font-size: 1rem; }
+.card p { margin: 0; color: var(--muted); font-size: 0.925rem; }
+
+/* subtle glass accent used inside some cards */
+.card .glass {
+  background: var(--glass);
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+/* ---------- Buttons (animated) ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #fff));
+  color: white;
+  box-shadow: 0 10px 24px rgba(99,102,241,0.12);
+  transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+  will-change: transform;
+}
+.btn:hover { transform: translateY(-4px); filter: brightness(1.02); }
+.btn:active { transform: translateY(-1px) scale(.997); box-shadow: 0 6px 12px rgba(99,102,241,0.10); }
+.btn.secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(15,23,42,0.06);
+  box-shadow: none;
+}
+
+/* small icon micro-interaction */
+.btn .icon {
+  display: inline-block;
+  transform-origin: center;
+  transition: transform .18s ease;
+}
+.btn:hover .icon { transform: rotate(-8deg) translateY(-2px); }
+
+/* ---------- Inputs ---------- */
+.input, .select, .textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  background: var(--surface);
+  font-size: 0.95rem;
+  color: var(--text);
+  outline: none;
+  transition: box-shadow .18s ease, border-color .18s ease, background .18s ease;
+}
+.input:focus, .select:focus, .textarea:focus {
+  box-shadow: 0 10px 30px rgba(99,102,241,0.08);
+  border-color: color-mix(in srgb, var(--accent) 70%, var(--border));
+}
+
+/* ---------- Players list ---------- */
+.players-list { display: flex; gap: 12px; flex-wrap: wrap; }
+.player {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(15,23,42,0.02), rgba(15,23,42,0.01));
+  border: 1px solid rgba(15,23,42,0.03);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.player:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(2,6,23,0.06); }
+.player .avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--surface) 92%, transparent), color-mix(in srgb, var(--accent) 8%, transparent));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ---------- Quiz Section ---------- */
+.quiz-area { display: flex; flex-direction: column; gap: 16px; }
+.question { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+.options { display: grid; gap: 10px; }
+.option-btn {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+  background: linear-gradient(180deg, var(--surface), color-mix(in srgb,var(--surface) 92%, transparent));
+  text-align: left;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform .12s ease, box-shadow .14s ease, background .18s ease, border-color .12s ease;
+  position: relative;
+  overflow: hidden;
+}
+.option-btn:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(2,6,23,0.06); }
+.option-btn.selected {
+  background: linear-gradient(90deg, color-mix(in srgb,var(--accent) 60%, transparent), color-mix(in srgb,var(--brand-1) 18%, transparent));
+  color: white;
+  border-color: color-mix(in srgb,var(--accent) 60%, transparent);
+  box-shadow: 0 12px 30px rgba(99,102,241,0.12);
+  transform: translateY(-6px) scale(1.01);
+}
+
+/* option reveal micro animation */
+.option-btn .badge {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  opacity: 0;
+  transform: translateX(6px);
+  transition: opacity .18s ease, transform .18s ease;
+}
+.option-btn.selected .badge { opacity: 1; transform: translateX(0); }
+
+/* Correct / incorrect states */
+.option-btn.correct {
+  border-color: color-mix(in srgb, var(--success) 70%, transparent);
+  box-shadow: 0 12px 30px rgba(16,163,127,0.08);
+  background: linear-gradient(90deg, color-mix(in srgb,var(--success) 10%, transparent), color-mix(in srgb,var(--success) 3%, transparent));
+}
+.option-btn.incorrect {
+  border-color: color-mix(in srgb, var(--danger) 70%, transparent);
+  background: linear-gradient(90deg, color-mix(in srgb,var(--danger) 8%, transparent), transparent);
+  animation: pulse .6s ease;
+}
+
+/* ---------- Timer & status ---------- */
+.status-row { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.timer {
+  font-weight:800;
+  background: linear-gradient(90deg,var(--timer-start),var(--timer-end));
+  padding:6px 10px;
+  border-radius:8px;
+  display:inline-block;
+  color: #0b1220;
+  box-shadow: 0 8px 24px rgba(249,115,22,0.08);
+  animation: pulse 2.8s ease-in-out infinite;
+}
+
+/* Animated progress ring (can be used with SVG) */
+.progress-ring {
+  width: 44px;
+  height: 44px;
+  display:inline-grid;
+  place-items:center;
+  background: linear-gradient(180deg, color-mix(in srgb,var(--surface) 80%, transparent), transparent);
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+}
+
+/* ---------- Empty State ---------- */
+.empty-state { text-align: center; color: var(--muted); padding: 40px 18px; }
+
+/* ---------- Responsive Breakpoints ---------- */
+
+/* Mobile (<=640px) */
+@media (max-width: 640px) {
+  .container { padding-left: 12px; padding-right: 12px; }
+  .header-row { flex-direction: column; gap: 10px; align-items: stretch; }
+  .app-header .nav { justify-content: center; flex-wrap: wrap; }
+  .grid { gap: 14px; }
+  .players-list { gap: 8px; }
+  .options { grid-template-columns: 1fr; }
+  .card { padding: 14px; border-radius: 10px; }
+  .app-header .brand { font-size: 1rem; }
+}
+
+/* Tablet (641px – 1024px) */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .options { grid-template-columns: repeat(2, 1fr); }
+  .players-list { gap: 10px; }
+  .card { padding: 16px; }
+}
+
+/* Desktop (>=1025px) */
+@media (min-width: 1025px) {
+  .grid.dashboard-2cols { grid-template-columns: 320px 1fr; align-items: start; }
+  .grid.cards-3 { grid-template-columns: repeat(3, 1fr); }
+  .options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ---------- Helpers & accessibility ---------- */
+.sr-only {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px,1px,1px,1px);
+  white-space: nowrap;
+}
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.link { color: var(--accent); text-decoration: none; font-weight:700; }
+.link:hover { text-decoration: underline; }
+
+/* ---------- Small interactive hints (JS can toggle classes) ---------- */
+/* .pulse-urgent for timer when low */
+.timer.pulse-urgent { animation: pulse 0.8s ease-in-out infinite; box-shadow: 0 10px 28px rgba(249,115,22,0.18); transform-origin:center; }
+
+/* focus-visible friendly */
+:focus-visible { box-shadow: 0 10px 30px rgba(99,102,241,0.12), 0 0 0 3px rgba(99,102,241,0.06); border-radius:8px; }
