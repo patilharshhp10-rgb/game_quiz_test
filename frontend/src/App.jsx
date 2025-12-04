@@ -18,7 +18,7 @@ export default function App() {
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
 
-  const api = 'http://localhost:3000';
+  const api = 'https://game-quiz-test.onrender.com';
 
 const matchPlayer = async () => {
   if (!playerId) return alert('Enter playerId');
